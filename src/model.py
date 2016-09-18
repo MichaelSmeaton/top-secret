@@ -116,15 +116,20 @@ class WebScraper:
         results = []
         soup = BeautifulSoup(html, 'html.parser')
         # content = soup.find_all('div', {'id': 'main'})
-        content = soup.find_all("li", limit=max1)
-        for div in content:
+        found = soup.find_all("li", limit=max1)
+        # for div in content:
+        for data in found:
             if tag:
                 # li = div.find_all('li', limit=maximum)
-                li = div.find_all(*tag, limit=max2)
-                for kw in li:
-                    results.append(str(kw))
+                # li = div.find_all(*tag, limit=max2)
+                good_data = data.find_all(*tag, limit=max2)
+                # for kw in li:
+                for element in good_data:
+                    results.append(str(element))
+                # results.append(str(div))
             else:
-                results.append(str(div))
+                # results.append(str(div))
+                results.append(str(data))
         return results
 
     def get_html_content(self, url):
