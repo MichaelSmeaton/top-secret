@@ -62,24 +62,30 @@ class WebScraper:
             Method WebScraper.fetch()'s docstring.
         Get data from Web page.
         """
-        html = ""
-        try:
-            file_handler = open(path, 'r+')
-            html = file_handler.read()
-        except FileNotFoundError:
-            # req = requests.get(url)
-            # html = req.content
-            html = self.get_html_content(url)
-        finally:
-            # soup = BeautifulSoup(html, 'html.parser')
-            # results = []
-            results = self.fetch_data(html, maximum)
+        # html = ""
+        # try:
+        # file_handler = open(path, 'r+')
+        # html = file_handler.read()
+        # except FileNotFoundError:
+        # req = requests.get(url)
+        # html = req.content
+        html = self.get_html_content(url)
+        # finally:
+        # soup = BeautifulSoup(html, 'html.parser')
+        # results = []
+        results = self.fetch_data(html, maximum)
         # content = soup.find_all('div', {'id': 'main'})
         # for div in content:
         # li = div.find_all('li', limit=maximum)
         # li = self.fetch_data(html, maximum)
         # for data in li:
         # results.append(str(data))
+        return results
+
+    def fetch_from_file(self, path="", maximum=10):
+        file_handler = open(path, 'r+')
+        html = file_handler.read()
+        results = self.fetch_data(html, maximum)
         return results
 
     def fetch_by_keyword(self, url, tag, tag_class, css_class, maximum=10):
@@ -97,7 +103,8 @@ class WebScraper:
         # ul = div.find_all('li')
         # for li in ul:
         # ul = self.fetch_data(html, 0)
-        results = self.fetch_data(html, 0, maximum, tag, {tag_class: css_class})
+        results = self.fetch_data(html, 0,
+                                  maximum, tag, {tag_class: css_class})
         # for li in ul:
         # span = li.find_all('span', {attr: keyword}, limit=maximum)
         # for kw in span:
