@@ -96,7 +96,6 @@ class WebScraper:
         # ul = div.find_all('li')
         # for li in ul:
         ul = self.fetch_data(html, 0)
-        print(ul)
         for li in ul:
             span = li.find_all('span', {attr: keyword}, limit=maximum)
             for kw in span:
