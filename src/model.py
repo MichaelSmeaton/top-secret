@@ -59,7 +59,7 @@ class WebScraper:
     def fetch(self, url='http://www.apple.com/nz/'
                         'itunes/charts/albums/', maximum=10, path=""):
         """
-        Method WebScraper.fetch()'s docstring.
+            Method WebScraper.fetch()'s docstring.
         Get data from Web page.
         """
         html = ""
@@ -70,11 +70,12 @@ class WebScraper:
             req = requests.get(url)
             html = req.content
         finally:
-            soup = BeautifulSoup(html, 'html.parser')
+            # soup = BeautifulSoup(html, 'html.parser')
             results = []
-            content = soup.find_all('div', {'id': 'main'})
-        for div in content:
-            li = div.find_all('li', limit=maximum)
+        # content = soup.find_all('div', {'id': 'main'})
+        # for div in content:
+        # li = div.find_all('li', limit=maximum)
+            li = self.fetch_data(html, maximum)
             for data in li:
                 results.append(str(data))
         return results
@@ -86,19 +87,27 @@ class WebScraper:
         """
         req = requests.get(url)
         html = req.content
-        soup = BeautifulSoup(html, 'html.parser')
+        # soup = BeautifulSoup(html, 'html.parser')
         results = []
-        content = soup.find_all('div', {'id': 'main'})
-        for div in content:
-            ul = div.find_all('li')
-            for li in ul:
-                span = li.find_all('span', {attr: keyword}, limit=maximum)
-                for kw in span:
-                    results.append(str(kw))
+        # content = soup.find_all('div', {'id': 'main'})
+        # for div in content:
+        # ul = div.find_all('li')
+        # for li in ul:
+        ul = self.fetch_data(html, 0)
+        print(ul)
+        for li in ul:
+            span = li.find_all('span', {attr: keyword}, limit=maximum)
+            for kw in span:
+                results.append(str(kw))
         return results
 
-    def fetch_url(self):
-            pass
+    def fetch_data(self, html, maximum):
+        li = []
+        soup = BeautifulSoup(html, 'html.parser')
+        content = soup.find_all('div', {'id': 'main'})
+        for div in content:
+            li = div.find_all('li', limit=maximum)
+        return li
 
     def extract(self, raw_data, option):
         """
