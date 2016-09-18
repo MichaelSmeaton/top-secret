@@ -67,8 +67,9 @@ class WebScraper:
             file_handler = open(path, 'r+')
             html = file_handler.read()
         except FileNotFoundError:
-            req = requests.get(url)
-            html = req.content
+            # req = requests.get(url)
+            # html = req.content
+            html = self.get_html_content(url)
         finally:
             # soup = BeautifulSoup(html, 'html.parser')
             results = []
@@ -85,8 +86,9 @@ class WebScraper:
         Method WebScraper.fetch()'s docstring.
         Get data by keyword lookup from Web page.
         """
-        req = requests.get(url)
-        html = req.content
+        # req = requests.get(url)
+        # html = req.content
+        html = self.get_html_content(url)
         # soup = BeautifulSoup(html, 'html.parser')
         results = []
         # content = soup.find_all('div', {'id': 'main'})
@@ -108,6 +110,10 @@ class WebScraper:
         for div in content:
             li = div.find_all('li', limit=maximum)
         return li
+
+    def get_html_content(self, url):
+        req = requests.get(url)
+        return req.content
 
     def extract(self, raw_data, option):
         """
