@@ -97,6 +97,9 @@ class WebScraper:
                     results.append(str(kw))
         return results
 
+    def fetch_url(self):
+            pass
+
     def extract(self, raw_data, option):
         """
         Method WebScraper.extract()'s docstring.
