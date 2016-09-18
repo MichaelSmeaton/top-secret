@@ -59,7 +59,8 @@ class WebScrapingController(Controller):
             self._container['image'] = self._model.extract(self._data, "image")
             self._links = self._model.extract(self._data, "link")
             for link in self._links:
-                self._data = self._model.fetch_by_keyword(link, "class",
+                self._data = self._model.fetch_by_keyword(link,
+                                                          "span", "class",
                                                           "price")
                 self._container['price'].append(self._model.extract(self._data,
                                                                     "price"))

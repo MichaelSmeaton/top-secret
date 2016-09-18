@@ -30,7 +30,7 @@ class FunctionCoverageTests(unittest.TestCase):
                          ('https://itunes.apple.com/nz/'
                           'album/poi-e/id256565680?'
                           'i=256566239&v0='
-                          'WWW-NZ-ITSTOP100-SONGS&l=en&ign-mpt=uo%3D4',
+                          'WWW-NZ-ITSTOP100-SONGS&l=en&ign-mpt=uo%3D4', "span",
                           "class", "price", 1))
 
     def test_6(self):

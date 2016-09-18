@@ -72,16 +72,17 @@ class WebScraper:
             html = self.get_html_content(url)
         finally:
             # soup = BeautifulSoup(html, 'html.parser')
-            results = []
+            # results = []
+            results = self.fetch_data(html, maximum)
         # content = soup.find_all('div', {'id': 'main'})
         # for div in content:
         # li = div.find_all('li', limit=maximum)
-            li = self.fetch_data(html, maximum)
-            for data in li:
-                results.append(str(data))
+        # li = self.fetch_data(html, maximum)
+        # for data in li:
+        # results.append(str(data))
         return results
 
-    def fetch_by_keyword(self, url, attr, keyword, maximum=10):
+    def fetch_by_keyword(self, url, tag, tag_class, css_class, maximum=10):
         """
         Method WebScraper.fetch()'s docstring.
         Get data by keyword lookup from Web page.
@@ -90,25 +91,34 @@ class WebScraper:
         # html = req.content
         html = self.get_html_content(url)
         # soup = BeautifulSoup(html, 'html.parser')
-        results = []
+        # results = []
         # content = soup.find_all('div', {'id': 'main'})
         # for div in content:
         # ul = div.find_all('li')
         # for li in ul:
-        ul = self.fetch_data(html, 0)
-        for li in ul:
-            span = li.find_all('span', {attr: keyword}, limit=maximum)
-            for kw in span:
-                results.append(str(kw))
+        # ul = self.fetch_data(html, 0)
+        results = self.fetch_data(html, 0, maximum, tag, {tag_class: css_class})
+        # for li in ul:
+        # span = li.find_all('span', {attr: keyword}, limit=maximum)
+        # for kw in span:
+        # results.append(str(kw))
         return results
 
-    def fetch_data(self, html, maximum):
-        li = []
+    def fetch_data(self, html, max1, max2=10, *tag):
+        #  li = []
+        results = []
         soup = BeautifulSoup(html, 'html.parser')
-        content = soup.find_all('div', {'id': 'main'})
+        # content = soup.find_all('div', {'id': 'main'})
+        content = soup.find_all("li", limit=max1)
         for div in content:
-            li = div.find_all('li', limit=maximum)
-        return li
+            if tag:
+                # li = div.find_all('li', limit=maximum)
+                li = div.find_all(*tag, limit=max2)
+                for kw in li:
+                    results.append(str(kw))
+            else:
+                results.append(str(div))
+        return results
 
     def get_html_content(self, url):
         req = requests.get(url)
