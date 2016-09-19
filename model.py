@@ -56,10 +56,11 @@ class WebScraper:
                 raise
         return False
 
-    def fetch(self, url='http://www.apple.com/nz/'
-                        'itunes/charts/albums/', maximum=10, path=""):
+    def fetch_from_url(self, url='http://www.apple.com/nz/'
+                                 'itunes/charts/albums/',
+                       max1=10, max2=10, *tag):
         """
-            Method WebScraper.fetch()'s docstring.
+        Method WebScraper.fetch()'s docstring.
         Get data from Web page.
         """
         # html = ""
@@ -73,7 +74,8 @@ class WebScraper:
         # finally:
         # soup = BeautifulSoup(html, 'html.parser')
         # results = []
-        results = self.fetch_data(html, maximum)
+        # results = self.fetch(html, maximum)
+        results = self.fetch_data(html, max1, max2, *tag)
         # content = soup.find_all('div', {'id': 'main'})
         # for div in content:
         # li = div.find_all('li', limit=maximum)
@@ -85,17 +87,18 @@ class WebScraper:
     def fetch_from_file(self, path="", maximum=10):
         file_handler = open(path, 'r+')
         html = file_handler.read()
+        # results = self.fetch_from_url(html, maximum)
         results = self.fetch_data(html, maximum)
         return results
 
-    def fetch_by_keyword(self, url, tag, tag_class, css_class, maximum=10):
-        """
-        Method WebScraper.fetch()'s docstring.
-        Get data by keyword lookup from Web page.
-        """
+    # def fetch_by_keyword(self, url, tag, tag_class, css_class, maximum=10):
+        # """
+        # Method WebScraper.fetch()'s docstring.
+        # Get data by keyword lookup from Web page.
+        # """
         # req = requests.get(url)
         # html = req.content
-        html = self.get_html_content(url)
+        # html = self.get_html_content(url)
         # soup = BeautifulSoup(html, 'html.parser')
         # results = []
         # content = soup.find_all('div', {'id': 'main'})
@@ -103,28 +106,34 @@ class WebScraper:
         # ul = div.find_all('li')
         # for li in ul:
         # ul = self.fetch_data(html, 0)
-        results = self.fetch_data(html, 0,
-                                  maximum, tag, {tag_class: css_class})
+        # results = self.fetch(html, 0,
+        # maximum, tag, {tag_class: css_class})
         # for li in ul:
         # span = li.find_all('span', {attr: keyword}, limit=maximum)
         # for kw in span:
         # results.append(str(kw))
-        return results
+        # return results
 
-    def fetch_data(self, html, max1, max2=10, *tag):
+    def fetch_data(self, html, max1=10, max2=10, *tag):
         #  li = []
         results = []
         soup = BeautifulSoup(html, 'html.parser')
         # content = soup.find_all('div', {'id': 'main'})
-        content = soup.find_all("li", limit=max1)
-        for div in content:
-            if tag:
-                # li = div.find_all('li', limit=maximum)
-                li = div.find_all(*tag, limit=max2)
-                for kw in li:
-                    results.append(str(kw))
-            else:
-                results.append(str(div))
+        found = soup.find_all("li", limit=max1)
+        # for div in content:
+        for data in found:
+            # if tag:
+            # li = div.find_all('li', limit=maximum)
+            # li = div.find_all(*tag, limit=max2)
+            good_data = data.find_all(*tag, limit=max2)
+            # for kw in li:
+            # for element in good_data:
+            # results.append(str(element))
+            # results.append(str(div))
+            # else:
+            # results.append(str(div))
+            [results.append(str(element)) for element in good_data] \
+                if tag else results.append(str(data))
         return results
 
     def get_html_content(self, url):
