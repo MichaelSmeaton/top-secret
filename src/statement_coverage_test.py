@@ -45,27 +45,27 @@ class StatementCoverageTests(unittest.TestCase):
         self.assertEqual(["http://www.domain.com/image.jpg"],
                          self.model.extract
                          (['<a href="http://www.domain.com/image.jpg">'
-                           '</a>'], "image"))
+                           '</a>'], "i"))
 
     def test_10(self):
         self.assertEqual(["album"],
                          self.model.extract
                          (["<li>album</li><li>artist<\li>"],
-                          "album"))
+                          "a"))
 
     def test_11(self):
         self.assertEqual(["artist"], self.model.extract(
-            ["<li>album</li><li>artist<\li>"], "artist"))
+            ["<li>album</li><li>artist<\li>"], "ar"))
 
     def test_12(self):
         self.assertEqual(["http://www.domain.com"],
                          self.model.extract
                          (['<a href="http://www.domain.com"></a>'],
-                          "link"))
+                          "l"))
 
     def test_13(self):
         self.assertEqual([Decimal('9.99')],
-                         self.model.extract(['<span>$9.99</span>'], "price"))
+                         self.model.extract(['<span>$9.99</span>'], "p"))
 
     def tearDown(self):
         print("This test case is done!")

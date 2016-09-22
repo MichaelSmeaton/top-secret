@@ -2,6 +2,7 @@ import requests
 import re
 from bs4 import BeautifulSoup
 from decimal import Decimal
+from src.rule_type import *
 
 
 class WebScraper:
@@ -56,10 +57,11 @@ class WebScraper:
                 raise
         return False
 
-    def fetch(self, url='http://www.apple.com/nz/'
-                        'itunes/charts/albums/', maximum=10, path=""):
+    def fetch_from_url(self, url='http://www.apple.com/nz/'
+                                 'itunes/charts/albums/',
+                       max1=0, max2=0, *tag):
         """
-            Method WebScraper.fetch()'s docstring.
+        Method WebScraper.fetch()'s docstring.
         Get data from Web page.
         """
         # html = ""
@@ -73,7 +75,8 @@ class WebScraper:
         # finally:
         # soup = BeautifulSoup(html, 'html.parser')
         # results = []
-        results = self.fetch_data(html, maximum)
+        # results = self.fetch(html, maximum)
+        results = self.fetch_data(html, max1, max2, *tag)
         # content = soup.find_all('div', {'id': 'main'})
         # for div in content:
         # li = div.find_all('li', limit=maximum)
@@ -82,20 +85,22 @@ class WebScraper:
         # results.append(str(data))
         return results
 
-    def fetch_from_file(self, path="", maximum=10):
+    def fetch_from_file(self, path="", maximum=0):
         file_handler = open(path, 'r+')
         html = file_handler.read()
+        # results = self.fetch_from_url(html, maximum)
         results = self.fetch_data(html, maximum)
         return results
 
-    def fetch_by_keyword(self, url, tag, tag_class, css_class, maximum=10):
-        """
-        Method WebScraper.fetch()'s docstring.
-        Get data by keyword lookup from Web page.
-        """
+        # def fetch_by_keyword(self, url, tag,
+        # tag_class, css_class, maximum=10):
+        # """
+        # Method WebScraper.fetch()'s docstring.
+        # Get data by keyword lookup from Web page.
+        # """
         # req = requests.get(url)
         # html = req.content
-        html = self.get_html_content(url)
+        # html = self.get_html_content(url)
         # soup = BeautifulSoup(html, 'html.parser')
         # results = []
         # content = soup.find_all('div', {'id': 'main'})
@@ -103,34 +108,34 @@ class WebScraper:
         # ul = div.find_all('li')
         # for li in ul:
         # ul = self.fetch_data(html, 0)
-        results = self.fetch_data(html, 0,
-                                  maximum, tag, {tag_class: css_class})
+        # results = self.fetch(html, 0,
+        # maximum, tag, {tag_class: css_class})
         # for li in ul:
         # span = li.find_all('span', {attr: keyword}, limit=maximum)
         # for kw in span:
         # results.append(str(kw))
-        return results
+        # return results
 
-    def fetch_data(self, html, max1, max2=10, *tag):
+    def fetch_data(self, html, max1=0, max2=0, *tag):
         #  li = []
         results = []
         soup = BeautifulSoup(html, 'html.parser')
-        # content = soup.find_all('div', {'id': 'main'})
-        found = soup.find_all("li", limit=max1)
-        # for div in content:
-        for data in found:
-            # if tag:
-            # li = div.find_all('li', limit=maximum)
-            # li = div.find_all(*tag, limit=max2)
-            good_data = data.find_all(*tag, limit=max2)
-        # for kw in li:
-        # for element in good_data:
-        # results.append(str(element))
-        # results.append(str(div))
-        # else:
-        # results.append(str(div))
-            [results.append(str(element)) for element in good_data] \
-                if tag else results.append(str(data))
+        content = soup.find_all('div', {'id': 'main'})
+        for found in content:
+            found = found.find_all("li", limit=max1)
+            for data in found:
+                # if tag:
+                # li = div.find_all('li', limit=maximum)
+                # li = div.find_all(*tag, limit=max2)
+                good_data = data.find_all(*tag, limit=max2)
+                # for kw in li:
+                # for element in good_data:
+                # results.append(str(element))
+                # results.append(str(div))
+                # else:
+                # results.append(str(div))
+                [results.append(str(element)) for element in good_data] \
+                    if tag else results.append(str(data))
         return results
 
     def get_html_content(self, url):
@@ -142,52 +147,50 @@ class WebScraper:
         Method WebScraper.extract()'s docstring.
         Find and extract useful data
         """
-        rule = {
-            "ranking": "[0-9]+",
-            "image": "(https?):(//)+[^\s]+\.(jpg|jpeg|jif|jfif|"
-                     "gif|tif|tiff|png)",
-            "album": ">[-\w`~!@#$%^&amp;*\(\)+={}|\[\]\\:"
-                     "&quot;;'&lt;&gt;?,.\/ ]+<",
-            "artist": ">[-\w`~!@#$%^&amp;*\(\)+={}|\[\]\\:"
-                      "&quot;;'&lt;&gt;?,.\/ ]+<",
-            "link": "((https?):(//)+([\w\d:#@%/;$()~_?\+-=\\\.&](#!)?)*)",
-            "price": "[0-9]+\.[0-9]+"
-        }
+
         results = []
+        r = RuleType.create(option)
+        code = r.get_code()
         for item in raw_data:
             no_tags = str(item)
-            if option == "ranking":
+            if code == "r":
                 try:
-                    results.append(int(re.search(rule[option],
+                    results.append(int(re.search(r.get_rule(),
                                                  self.tag_content("strong",
                                                                   "strong",
-                                                                  no_tags))
-                                       .group(0)))
+                                                                  no_tags)).
+                                       group(0)))
                 except AttributeError:
-                    print("Error: Value not found.")
-                    raise
-            elif option == "image":
-                results.append(re.search(rule[option],
-                                         self.tag_content("a href", "a",
-                                                          no_tags), re.I)
-                               .group(0))
-            elif option == "album":
+                    continue
+            elif code == "i":
+                try:
+                    results.append(re.search(
+                        r.get_rule(),
+                        self.tag_content("a href", "a",
+                                         no_tags), re.I)
+                                   .group(0))
+                except AttributeError:
+                    continue
+            elif code == "a":
                 no_tags = re.sub('(<strong>)(.*)'
                                  '(</strong>)', '', no_tags, re.I)
-                data = (re.findall(rule[option], no_tags, re.I))
+                data = (re.findall(r.get_rule(), no_tags, re.I))
                 results.append(self.clean(data, 0))
-            elif option == "artist":
+            elif code == "ar":
                 no_tags = re.sub('(<strong>)(.*)'
                                  '(</strong>)', '', no_tags, re.I)
-                data = (re.findall(rule[option], no_tags, re.I))
+                data = (re.findall(r.get_rule(), no_tags, re.I))
                 results.append(self.clean(data, 1))
-            elif option == "link":
-                results.append(re.search(rule[option],
-                                         self.tag_content("a href", "a",
-                                                          no_tags), re.I)
-                               .group(0))
-            elif option == "price":
-                results.append(Decimal(re.search(rule[option],
+            elif code == "l":
+                try:
+                    results.append(re.search(r.get_rule(),
+                                             self.tag_content("a href", "a",
+                                                              no_tags), re.I)
+                                   .group(0))
+                except AttributeError:
+                    continue
+            elif code == "p":
+                results.append(Decimal(re.search(r.get_rule(),
                                                  self.tag_content(
                                                      "span", "span", no_tags))
                                        .group(0)))

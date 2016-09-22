@@ -48,22 +48,22 @@ class WebScrapingController(Controller):
         self._url = self.get_correct_url(url)
         return True
 
-    def get_data(self):
+    def get_data(self, no_of_records=10):
         if self.get_connection(self._url):
-            self._data = self._model.fetch(self._url)
-            self._container['album'] = self._model.extract(self._data, "album")
+            self._data = self._model.fetch_from_url(self._url, no_of_records)
+            self._container['album'] = self._model.extract(self._data, "a")
             self._container['artist'] = self._model.extract(self._data,
-                                                            "artist")
+                                                            "ar")
             self._container['ranking'] = self._model.extract(self._data,
-                                                             "ranking")
-            self._container['image'] = self._model.extract(self._data, "image")
-            self._links = self._model.extract(self._data, "link")
+                                                             "r")
+            self._container['image'] = self._model.extract(self._data, "i")
+            self._links = self._model.extract(self._data, "l")
             for link in self._links:
-                self._data = self._model.fetch_by_keyword(link,
-                                                          "span", "class",
-                                                          "price")
+                self._data = self._model.fetch_from_url(link, 0, no_of_records,
+                                                        "span",
+                                                        {"class": "price"})
                 self._container['price'].append(self._model.extract(self._data,
-                                                                    "price"))
+                                                                    "p"))
             return True
 
     def get_container(self, index):
