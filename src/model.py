@@ -147,75 +147,12 @@ class WebScraper:
         Method WebScraper.extract()'s docstring.
         Find and extract useful data
         """
-
         results = []
         r = RuleType.create(option)
-        code = r.get_code()
         for item in raw_data:
-            no_tags = str(item)
-            if code == "r":
-                try:
-                    results.append(int(re.search(r.get_rule(),
-                                                 self.tag_content("strong",
-                                                                  "strong",
-                                                                  no_tags)).
-                                       group(0)))
-                except AttributeError:
-                    continue
-            elif code == "i":
-                try:
-                    results.append(re.search(
-                        r.get_rule(),
-                        self.tag_content("a href", "a",
-                                         no_tags), re.I)
-                                   .group(0))
-                except AttributeError:
-                    continue
-            elif code == "a":
-                no_tags = re.sub('(<strong>)(.*)'
-                                 '(</strong>)', '', no_tags, re.I)
-                data = (re.findall(r.get_rule(), no_tags, re.I))
-                results.append(self.clean(data, 0))
-            elif code == "ar":
-                no_tags = re.sub('(<strong>)(.*)'
-                                 '(</strong>)', '', no_tags, re.I)
-                data = (re.findall(r.get_rule(), no_tags, re.I))
-                results.append(self.clean(data, 1))
-            elif code == "l":
-                try:
-                    results.append(re.search(r.get_rule(),
-                                             self.tag_content("a href", "a",
-                                                              no_tags), re.I)
-                                   .group(0))
-                except AttributeError:
-                    continue
-            elif code == "p":
-                results.append(Decimal(re.search(r.get_rule(),
-                                                 self.tag_content(
-                                                     "span", "span", no_tags))
-                                       .group(0)))
+            data = str(item)
+            try:
+                results.append(r.extract(data))
+            except AttributeError:
+                continue
         return results
-
-    def tag_content(self, open_tag, close_tag, data):
-        """
-        Method WebScraper.fetch()'s docstring.
-        Should return a substring of string between and including tags
-        """
-        regex = r"(<" + \
-                re.escape(open_tag) + r")(.*)(</" + \
-                re.escape(close_tag) + ">)"
-        return re.search(regex, data, re.I | re.M).group(0)
-
-    def clean(self, data, x):
-        """
-        Method WebScraper.clean()'s docstring.
-        Removes unwanted sequence of characters from a list of strings
-        """
-        chars = ['>', '<', "&amp;"]
-        for i, items in enumerate(data):
-            for c in chars:
-                if c == "&amp;":
-                    data[i] = data[i].replace(c, '&')
-                else:
-                    data[i] = data[i].replace(c, '')
-        return data[x]

@@ -1,4 +1,5 @@
 from src.model import WebScraper
+from src.rule_type import *
 
 import unittest
 
@@ -7,6 +8,7 @@ class FunctionCoverageTests(unittest.TestCase):
     def setUp(self):
         print("A test case is called.")
         self.model = WebScraper()
+        self.rule = Album()
 
     def test_1(self):
         self.assertEqual("http://www.google.com",
@@ -41,11 +43,11 @@ class FunctionCoverageTests(unittest.TestCase):
 
     def test_7(self):
         self.assertEqual("<strong>1.</strong>",
-                         self.model.tag_content(
+                         self.rule.get_tags(
                              "strong", "strong", "<li><strong>1.</strong>"))
 
     def test_8(self):
-        self.assertEqual("li", self.model.clean(['<li>'], 0))
+        self.assertEqual("li", self.rule.clean(['<li>'], 0))
 
     def tearDown(self):
         print("This test case is done!")
