@@ -1,0 +1,7 @@
+Name:               Long Method
+Location:           <WebScraper/src>-<model>-<WebScraper>-<between Line 94 and 148>
+Reasons:
+                    1. Mentally, it is harder to create a new method than to add to an existing one.
+                    2. Easier to write code than to read it, this "smell" goes unnoticed until the method becomes too long
+Strategy/approach:  Extract method
+                    Replace Temp with Query

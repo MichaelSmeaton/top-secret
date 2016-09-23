@@ -1,0 +1,8 @@
+Name:               Switch Statement
+Location:           <WebScraper/src>-<model>-<WebScraper>-<between Line 113 and 147>
+Reasons:
+                    1. Mentally less taxing to place a new feature in an existing class than to create a new class for the feature.
+                    2. Caused by the gradual increase in the size of code, as code is always being added.
+Strategy/approach:  Extract Method
+                    Replace Type Code with State/Strategy
+                    Replace Conditional with Polymorphism

@@ -1,0 +1,6 @@
+Name:               Duplication
+Location:           <WebScraper/src>-<model>-<WebScraper>-<between Line 59 and 97>
+Reasons:
+                    1. Existing code that perform the desired actions is duplicated in multiple places due to convenience and time constraint.
+                    2. The almost duplicate method has some parts of its code modified or extended to suit a different purpose
+Strategy/approach:  Extract Method
