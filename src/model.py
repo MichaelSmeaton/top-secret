@@ -4,6 +4,8 @@ from src.rule_type import *
 
 
 class WebScraper:
+    __rules = [Album(), Artist(), Price(), Image(), Link(), Ranking()]
+
     def is_correct(self, url):
         """`
         Method WebScraper.is_correct()'s docstring.
@@ -94,7 +96,7 @@ class WebScraper:
         Find and extract useful data
         """
         results = []
-        selected_rule = self.get_rule(rule_code)
+        selected_rule = self.select_rule(rule_code)
         for item in raw_data:
             data = str(item)
             try:
@@ -103,10 +105,15 @@ class WebScraper:
                 continue
         return results
 
-    def get_rule(self, rule_code):
-        rules = [Album(), Artist(), Price(), Image(), Link(), Ranking()]
+    def select_rule(self, rule_code):
         selected_rule = ""
-        for rule in rules:
+        for rule in self.get_rules():
             if rule.get_code() == rule_code:
                 selected_rule = rule
         return selected_rule
+
+    def get_rules(self):
+        return self.__rules
+
+    def set_rules(self, rule_list):
+        self.__rules = rule_list
