@@ -1,0 +1,66 @@
+Duplication
+Steps
+1. Write testing code
+2. Create new method
+3. Copy code to new method
+4. Delete old code and put a call for new method instead
+5. Rename variable and parameter name
+6. Add new method parameters and pass variable to parameter of new method
+7. Copy code to new method delete old code
+8. Rename variables in new method
+9. Rewrite statement in less lines
+10. Merge into one method and delete old method
+11. Method renaming
+
+Has the bad smells successfully been removed at the end?
+Yes
+
+How well it is in terms of program quality?
+Simplified structure
+Shortened code
+Easier to maintain
+
+Do you bring new bad smells into the program?
+Not that I'm aware of
+
+
+Switch statement
+Steps
+1. Create new class and abstract field get method
+2. Create subclasses and overwrite get method
+3. Create static factory method in RuleType
+4. In Extract method, change coded type to state class and call factory method for getting new state objects
+5. Move methods to RuleType and update references
+6. Replace conditional with polymorphism
+
+Has the bad smells successfully been removed at the end?
+Yes
+
+How well it is in terms of program quality?
+Improved readability
+Easier to maintain
+Extensible
+
+Do you bring new bad smells into the program?
+Long method
+Duplication
+Temporary field
+
+
+Long method
+Steps
+1. Create new method
+2. Copy code fragment to new method and delete old code fragment
+3. Change scope of rule list and create access methods for rule list
+
+Has the bad smells successfully been removed at the end?
+Yes
+
+
+How well it is in terms of program quality?
+Improved readability
+Easier to understand
+Easier to maintain
+
+Do you bring new bad smells into the program?
+Speculative Generality
