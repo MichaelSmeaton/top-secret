@@ -36,11 +36,6 @@ class StatementCoverageTests(unittest.TestCase):
         self.assertRaises(requests.ConnectionError,
                           self.model.is_connected, "http://qaz.wsx.edc.rfv")
 
-    def test_8(self):
-        self.assertRaises(AttributeError,
-                          self.model.extract,
-                          ["<li><strong>str</strong></li>"], "ranking")
-
     def test_9(self):
         self.assertEqual(["http://www.domain.com/image.jpg"],
                          self.model.extract

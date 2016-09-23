@@ -39,21 +39,6 @@ class RuleType(ABC):
                     data[i] = data[i].replace(c, '')
         return data[x]
 
-    @staticmethod
-    def create(code):
-        if code == "a":
-            return Album()
-        elif code == "ar":
-            return Artist()
-        elif code == "p":
-            return Price()
-        elif code == "i":
-            return Image()
-        elif code == "l":
-            return Link()
-        elif code == "r":
-            return Ranking()
-
 
 class Album(RuleType):
     def __init__(self):

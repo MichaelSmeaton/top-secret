@@ -142,17 +142,21 @@ class WebScraper:
         req = requests.get(url)
         return req.content
 
-    def extract(self, raw_data, option):
+    def extract(self, raw_data, rule_code):
         """
         Method WebScraper.extract()'s docstring.
         Find and extract useful data
         """
         results = []
-        r = RuleType.create(option)
+        rules = [Album(), Artist(), Price(), Image(), Link(), Ranking()]
+        selected_rule = ""
+        for rule in rules:
+            if rule.get_code() == rule_code:
+                selected_rule = rule
         for item in raw_data:
             data = str(item)
             try:
-                results.append(r.extract(data))
+                results.append(selected_rule.extract(data))
             except AttributeError:
                 continue
         return results
