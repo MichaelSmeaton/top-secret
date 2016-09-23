@@ -94,11 +94,7 @@ class WebScraper:
         Find and extract useful data
         """
         results = []
-        rules = [Album(), Artist(), Price(), Image(), Link(), Ranking()]
-        selected_rule = ""
-        for rule in rules:
-            if rule.get_code() == rule_code:
-                selected_rule = rule
+        selected_rule = self.get_rule(rule_code)
         for item in raw_data:
             data = str(item)
             try:
@@ -108,4 +104,9 @@ class WebScraper:
         return results
 
     def get_rule(self, rule_code):
-        pass
+        rules = [Album(), Artist(), Price(), Image(), Link(), Ranking()]
+        selected_rule = ""
+        for rule in rules:
+            if rule.get_code() == rule_code:
+                selected_rule = rule
+        return selected_rule
